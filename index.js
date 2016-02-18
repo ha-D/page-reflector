@@ -7,6 +7,9 @@ var pageUrl = process.env.URL;
 app.set('port', (process.env.PORT || 5000));
 
 app.get('/', function(req, res) {
+  if (!pageUrl) {
+    return res.send("No Page Set");
+  }
   request(pageUrl, function (error, proxyRes, body) {
     if (proxyRes.statusCode != 200) {
       res.status(proxyRes.statusCode);
