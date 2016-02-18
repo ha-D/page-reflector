@@ -1,20 +1,17 @@
 var express = require('express');
-var http = require('http');
+var request = require('request');
 var app = express();
 
 var pageUrl = process.env.URL;
 
 app.set('port', (process.env.PORT || 5000));
 
-app.get('/', function(request, response) {  
-  http.get(pageUrl, function(resp) {
-    resp.on('data', function(chunk) {
-      response.write(chunk);
-    });
-
-    resp.on('end', function() {
-      response.end();
-    });
+app.get('/', function(req, res) {
+  request(pageUrl, function (error, proxyRes, body) {
+    if (proxyRes.statusCode != 200) {
+      res.status(proxyRes.statusCode);
+    }
+    res.send(body);
   });
 });
 
